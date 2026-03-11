@@ -11,7 +11,7 @@ import {
   killChromeByProfile,
   sleep,
   waitForChromeDebugPort,
-} from '../../baoyu-post-to-weibo/scripts/weibo-utils.js';
+} from './weibo-utils.js';
 
 const WEIBO_HOTSEARCH_URL = 'https://weibo.com/hot/search';
 

@@ -99,4 +99,3 @@ sleep 2
 - 页面使用虚拟滚动，脚本以 200px / 600ms 的速度缓慢滚动，确保所有条目经过 DOM 渲染窗口
 - 广告条目（含 `_doticon_` 标识）自动过滤
 - 置顶条目（含 `_ranktop_` 图片）保留并排在最前
-- 依赖同级 `baoyu-post-to-weibo` skill 中的 `weibo-utils.ts`
