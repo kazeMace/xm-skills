@@ -13,7 +13,7 @@ import {
   waitForChromeDebugPort,
 } from './weibo-utils.js';
 
-const WEIBO_HOTSEARCH_URL = 'https://weibo.com/hot/search';
+const WEIBO_HOTSEARCH_URL = 'https://weibo.com/newlogin?tabtype=search';
 
 export interface HotSearchItem {
   rank: number;
@@ -179,7 +179,7 @@ export async function fetchHotSearch(options: FetchHotSearchOptions = {}): Promi
       { sessionId },
     );
 
-    if (!urlResult.result.value.includes('weibo.com/hot/search')) {
+    if (!urlResult.result.value.includes('weibo.com/newlogin') && !urlResult.result.value.includes('weibo.com/hot/search')) {
       console.log('[weibo-hot-search] 导航到热搜页面...');
       await cdp.send('Page.navigate', { url: WEIBO_HOTSEARCH_URL }, { sessionId });
       await sleep(4000);

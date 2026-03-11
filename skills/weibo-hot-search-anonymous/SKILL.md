@@ -12,7 +12,7 @@ metadata:
 
 # 微博热搜抓取（匿名版）
 
-**无需微博账号，无需登录**，通过 Chrome/Edge CDP 以匿名身份访问微博热搜页面（`https://weibo.com/hot/search`），采集实时热搜列表并保存为 Markdown 表格。
+**无需微博账号，无需登录**，通过 Chrome/Edge CDP 以匿名身份访问微博热搜页面（`https://weibo.com/newlogin?tabtype=search`），采集实时热搜列表并保存为 Markdown 表格。
 
 微博热搜页面对未登录用户完全公开，本 skill 利用全新空白的浏览器配置目录访问，不依赖任何账号 Cookie。页面使用虚拟滚动，每次 DOM 中约保留 30 条，脚本缓慢滚动并在每步采集快照，覆盖全部约 50 条热搜。广告条目自动过滤，置顶条目保留并标注。
 

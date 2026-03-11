@@ -8,18 +8,24 @@ import os from 'node:os';
 import path from 'node:path';
 import process from 'node:process';
 
-export const CHROME_CANDIDATES = {
+export const BROWSER_CANDIDATES = {
   darwin: [
     '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
     '/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary',
+    '/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge',
+    '/Applications/Microsoft Edge Beta.app/Contents/MacOS/Microsoft Edge Beta',
     '/Applications/Chromium.app/Contents/MacOS/Chromium',
   ],
   win32: [
     'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
     'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+    'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
+    'C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe',
   ],
   default: [
     '/usr/bin/google-chrome',
+    '/usr/bin/microsoft-edge',
+    '/usr/bin/microsoft-edge-stable',
     '/usr/bin/chromium',
     '/usr/bin/chromium-browser',
   ],
@@ -30,10 +36,10 @@ export function findChromeExecutable(): string | undefined {
   if (override && fs.existsSync(override)) return override;
 
   const candidates = process.platform === 'darwin'
-    ? CHROME_CANDIDATES.darwin
+    ? BROWSER_CANDIDATES.darwin
     : process.platform === 'win32'
-      ? CHROME_CANDIDATES.win32
-      : CHROME_CANDIDATES.default;
+      ? BROWSER_CANDIDATES.win32
+      : BROWSER_CANDIDATES.default;
 
   for (const candidate of candidates) {
     if (fs.existsSync(candidate)) return candidate;
@@ -70,12 +76,12 @@ export function killChromeByProfile(profileDir: string): void {
 }
 
 export function getDefaultProfileDir(): string {
-  const override = process.env.BAOYU_CHROME_PROFILE_DIR?.trim() || process.env.WEIBO_BROWSER_PROFILE_DIR?.trim();
+  const override = process.env.WEIBO_BROWSER_PROFILE_DIR?.trim();
   if (override) return path.resolve(override);
   const base = process.platform === 'darwin'
     ? path.join(os.homedir(), 'Library', 'Application Support')
     : process.env.XDG_DATA_HOME || path.join(os.homedir(), '.local', 'share');
-  return path.join(base, 'baoyu-skills', 'chrome-profile');
+  return path.join(base, 'my-skill', 'browser-profile');
 }
 
 export function sleep(ms: number): Promise<void> {
@@ -96,7 +102,7 @@ export async function getFreePort(): Promise<number> {
         return;
       }
       const port = address.port;
-      server.close((err) => {
+      server.close((err: Error | null) => {
         if (err) reject(err);
         else resolve(port);
       });
@@ -125,7 +131,7 @@ export async function waitForChromeDebugPort(port: number, timeoutMs: number): P
     await sleep(200);
   }
 
-  throw new Error(`Chrome debug port not ready: ${lastError instanceof Error ? lastError.message : String(lastError)}`);
+  throw new Error(`Browser debug port not ready: ${lastError instanceof Error ? lastError.message : String(lastError)}`);
 }
 
 type PendingRequest = {
