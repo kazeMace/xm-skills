@@ -179,7 +179,7 @@ export async function fetchHotSearch(options: FetchHotSearchOptions = {}): Promi
       { sessionId },
     );
 
-    if (!urlResult.result.value.includes('weibo.com/newlogin') && !urlResult.result.value.includes('weibo.com/hot/search')) {
+    if (!urlResult.result.value.includes('weibo.com/newlogin')) {
       console.log('[weibo-hot-search] 导航到热搜页面...');
       await cdp.send('Page.navigate', { url: WEIBO_HOTSEARCH_URL }, { sessionId });
       await sleep(4000);
