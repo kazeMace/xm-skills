@@ -10,8 +10,8 @@
   },
   "plugins": [
     {
-      "name": "content-skills",
-      "description": "Content generation and publishing skills",
+      "name": "weibo-skills",
+      "description": "Weibo skills",
       "source": "./",
       "strict": false,
       "skills": [
