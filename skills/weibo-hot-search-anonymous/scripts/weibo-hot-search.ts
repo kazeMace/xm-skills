@@ -18,6 +18,7 @@ const WEIBO_HOTSEARCH_URL = 'https://weibo.com/newlogin?tabtype=search';
 export interface HotSearchItem {
   rank: number;
   title: string;
+  link?: string;
   heat?: string;
   tag?: string;
   isTop?: boolean;
@@ -54,8 +55,10 @@ export interface FetchHotSearchOptions {
 const SNAPSHOT_SCRIPT = `(() => {
   const containers = Array.from(document.querySelectorAll('[class*="_titout_"]'));
   return containers.map(el => {
-    const titleEl = el.querySelector('a[class*="_tit_"] span, a[class*="_tit_"]');
+    const titleA = el.querySelector('a[class*="_tit_"]');
+    const titleEl = titleA?.querySelector('span') || titleA;
     const title = titleEl?.textContent?.trim().replace(/^#|#$/g, '').trim() || '';
+    const link = titleA?.href || '';
 
     const numSibling = el.nextElementSibling;
     const heat = numSibling?.className?.includes('_num_')
@@ -73,12 +76,13 @@ const SNAPSHOT_SCRIPT = `(() => {
     const rankEl = el.querySelector('[class*="_ranknum_"]');
     const rankNum = rankEl ? (parseInt(rankEl.textContent?.trim() || '0', 10) || 0) : 0;
 
-    return { title, heat, tag, isAd, isTop, rankNum };
+    return { title, link, heat, tag, isAd, isTop, rankNum };
   }).filter(item => item.title.length > 0);
 })()`;
 
 interface SnapshotItem {
   title: string;
+  link: string;
   heat: string;
   tag: string;
   isAd: boolean;
@@ -272,6 +276,7 @@ export async function fetchHotSearch(options: FetchHotSearchOptions = {}): Promi
     const items: HotSearchItem[] = organic.map((item, i) => ({
       rank: i + 1,
       title: item.title,
+      link: item.link || undefined,
       heat: item.heat,
       tag: item.tag,
       isTop: item.isTop,
@@ -307,7 +312,8 @@ export async function saveHotSearchToMarkdown(
   for (const item of items) {
     const heat = item.heat ? item.heat.replace(/\s+/g, '') : '-';
     const tag = item.isTop ? '置顶' : (item.tag ? item.tag.replace(/\s+/g, '') : '-');
-    lines.push(`| ${item.rank} | ${item.title} | ${heat} | ${tag} |`);
+    const titleCell = item.link ? `[${item.title}](${item.link})` : item.title;
+    lines.push(`| ${item.rank} | ${titleCell} | ${heat} | ${tag} |`);
   }
 
   lines.push('');

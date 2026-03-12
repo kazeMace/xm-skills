@@ -58,9 +58,9 @@ ${BUN_X} {baseDir}/scripts/weibo-hot-search.ts --output ./data/hotsearch.md
 
 | 排名 | 热搜词 | 热度 | 标签 |
 |------|--------|------|------|
-| 1 | 某热搜词 | - | 置顶 |
-| 2 | 另一个热搜 | 1046777 | - |
-| 3 | 热搜三 | 764477 | 新 |
+| 1 | [某热搜词](https://s.weibo.com/weibo?q=%23某热搜词%23) | - | 置顶 |
+| 2 | [另一个热搜](https://s.weibo.com/weibo?q=%23另一个热搜%23) | 1046777 | - |
+| 3 | [热搜三](https://s.weibo.com/weibo?q=%23热搜三%23) | 764477 | 新 |
 ...
 ```
 
