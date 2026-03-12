@@ -44,9 +44,11 @@ kazeMace 分享的 Claude Code 技能集，提升日常工作效率。
 |------|------|----------|
 | **weibo-skills** | 微博相关工具 | [weibo-hot-search-anonymous](#weibo-hot-search-anonymous) |
 
+> 各技能版本历史：[SKILL_VERSIONS.md](./SKILL_VERSIONS.md)
+
 ## 可用技能
 
-### weibo-hot-search-anonymous
+### weibo-hot-search-anonymous · `v1.0.2`
 
 **无需微博账号，无需登录**，通过 Chrome/Edge CDP 以匿名身份抓取微博实时热搜榜并保存为 Markdown 文件。
 

@@ -138,18 +138,81 @@ function getDefaultProfileDir(): string {
 2. 用户级技能（`$HOME/.xm-skills/`）
 3. 系统级技能
 
+## Version Management
+
+本项目使用**三层版本体系**：
+
+| 文件 | 用途 | 说明 |
+|------|------|------|
+| `VERSION` | 项目整体版本（单一来源） | Git Tag、`marketplace.json` 均从此同步 |
+| `SKILL_VERSIONS.md` | 各 skill 独立版本总表 | 每次发布时实时维护 |
+| `skills/<name>/SKILL.md` → `version` | 单个 skill 版本 | 与 `SKILL_VERSIONS.md` 保持同步 |
+
+**同步关系**：
+
+```
+VERSION (单一来源)
+  ├── marketplace.json → metadata.version  (每次发布同步)
+  └── Git Tag: v{VERSION}                  (每次发布同步)
+
+SKILL_VERSIONS.md (总表)
+  └── skills/<name>/SKILL.md → version     (有变更的 skill 同步)
+```
+
+### 版本递增规则
+
+**项目版本（VERSION）**：取所有变更 skill 中最高升级幅度：
+
+| 变更类型 | VERSION 递增 | 示例 |
+|---------|-------------|------|
+| Breaking Change | Major | `1.0.2 → 2.0.0` |
+| 新增功能（feat）或新增 skill | Minor | `1.0.2 → 1.1.0` |
+| 修复/文档（fix/docs） | Patch | `1.0.2 → 1.0.3` |
+
+**单个 skill 版本**：仅对有实际变更的 skill 递增，未改动的 skill 版本保持不变。
+
+**版本递增示例**：
+
+```
+只改了 weibo-hot-search-anonymous（fix）：
+  VERSION:                             1.0.2 → 1.0.3
+  SKILL_VERSIONS.md:                   weibo-hot-search-anonymous 1.0.2 → 1.0.3
+  weibo-hot-search-anonymous/SKILL.md: 1.0.2 → 1.0.3
+  marketplace.json:                    1.0.2 → 1.0.3（跟随 VERSION）
+
+新增一个 skill（feat）：
+  VERSION:              1.0.3 → 1.1.0
+  SKILL_VERSIONS.md:    新增一行 new-skill 1.0.0
+  new-skill/SKILL.md:   1.0.0（初始）
+  marketplace.json:     1.0.3 → 1.1.0
+
+skill-a（feat）+ skill-b（fix）同时变更：
+  VERSION:              取最高幅度 → Minor 升级
+  SKILL_VERSIONS.md:    skill-a 和 skill-b 各自更新
+  marketplace.json:     跟随 VERSION
+```
+
 ## Release Process
 
-**重要**：用户请求 release/发布/push 时，必须按以下流程操作：
+**重要**：用户请求 release/发布/push 时，必须使用 `/release-skills` 工作流。
 
-1. 更新 `CHANGELOG.md`（如有）
-2. 更新 `marketplace.json` 版本号
-3. 更新 `README.md`（如适用）
-4. 所有文件一并提交后再打 tag
+发布流程概览：
+1. 分析 Git 提交，按 skill 分组
+2. 推荐版本号（项目版本 + 各 skill 版本）
+3. 用户确认后，同步更新：
+   - `VERSION`
+   - `SKILL_VERSIONS.md`（有变更的 skill）
+   - `skills/<name>/SKILL.md` version 字段（有变更的 skill）
+   - `.claude-plugin/marketplace.json` → `metadata.version`
+   - `CHANGELOG.md` 和 `CHANGELOG_zh.md`
+4. 创建 Release Commit → Git Tag → 可选 Push
+5. 执行 `bash scripts/sync-clawhub.sh` 同步到 clawhub
 
 **发布前检查**：
-- `marketplace.json` 版本号已更新
-- 所有技能的 `SKILL.md` `version` 字段与 marketplace 版本一致
+- `VERSION` 文件已更新
+- `SKILL_VERSIONS.md` 中有变更的 skill 行已更新
+- `marketplace.json` 版本与 `VERSION` 一致
+- Git Tag 与 `VERSION` 一致（格式 `v{VERSION}`）
 - README 中的技能说明与实际功能匹配
 
 ## Adding New Skills

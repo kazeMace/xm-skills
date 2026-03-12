@@ -44,9 +44,11 @@ In Claude Code, run:
 |--------|-------------|-----------------|
 | **weibo-skills** | Weibo utilities | [weibo-hot-search-anonymous](#weibo-hot-search-anonymous) |
 
+> Skill version history: [SKILL_VERSIONS.md](./SKILL_VERSIONS.md)
+
 ## Available Skills
 
-### weibo-hot-search-anonymous
+### weibo-hot-search-anonymous · `v1.0.2`
 
 **No Weibo account or login required.** Scrapes the Weibo real-time trending list anonymously via Chrome/Edge CDP and saves it as a Markdown file.
 
