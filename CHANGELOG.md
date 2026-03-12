@@ -1,3 +1,12 @@
+## 1.1.0 - 2026-03-12
+
+### Features
+- Extract Weibo search link for each hot search item; titles in Markdown output are now clickable links
+
+### Documentation
+- Add version management guidelines to CLAUDE.md
+- Add skill version badge to README
+
 ## 1.0.2 - 2026-03-12
 
 ### Features
